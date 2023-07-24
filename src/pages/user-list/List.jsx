@@ -1,45 +1,56 @@
-import "./list.scss"
-import Sidebar from "../../components/sidebar/Sidebar"
-import Navbar from "../../components/navbar/Navbar"
-import UserDatatable from "./user-datatable/UserDataTable"
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers } from "../../redux/users/userSlice"
+import "./list.scss";
+import { DataGrid } from "@mui/x-data-grid";
+import { userColumns, userRows } from "./userdatatablesource";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
-const UserList = () => {
-  const dispatch = useDispatch();
-  const {user, loading} = useSelector((state)=> state.user);
-  useEffect(() => {
-    dispatch(getAllUsers())
-  }, [dispatch])
+const UserDatatable = () => {
+  const [data, setData] = useState(userRows);
+  console.log(data);
+  const handleDelete = (id) => {
+    setData(data.filter((item) => item.id !== id));
+  };
+
+  const actionColumn = [
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <div className="cellAction">
+            <Link to="/users/test" style={{ textDecoration: "none" }}>
+              <div className="viewButton">View</div>
+            </Link>
+            <div
+              className="deleteButton"
+              onClick={() => handleDelete(params.row.id)}
+            >
+              Delete
+            </div>
+          </div>
+        );
+      },
+    },
+  ];
   return (
-    <div className="list">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Image</th>
-            <th>Status</th>
-            <th>Email</th>
-            <th>Age</th>
-          </tr>
-        </thead>
-        <tbody>
-          {user.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.username}</td>
-              <td>{user.img}</td>
-              <td>{user.status}</td>
-              <td>{user.email}</td>
-              <td>{user.age}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="datatable">
+      <div className="datatableTitle">
+        Add New User
+        <Link to="/users/new" className="link">
+          Add New
+        </Link>
+      </div>
+      <DataGrid
+        className="datagrid"
+        rows={data}
+        columns={userColumns.concat(actionColumn)}
+        pageSize={9}
+        rowsPerPageOptions={[9]}
+        checkboxSelection
+      />
     </div>
   );
 };
 
-export default UserList
+export default UserDatatable;
