@@ -1,5 +1,5 @@
 import './login.scss';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link,useNavigate } from 'react-router-dom';
 import { loginUser } from '../../redux/users/userSlice';
@@ -13,6 +13,18 @@ const LoginForm = () => {
   const [formData, setFormData] = useState(initialState);
   const  dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const userLocalStorage = localStorage.getItem('persist:root');
+    const userObject = JSON.parse(userLocalStorage);
+    const user = userObject ? JSON.parse(userObject.user) : null;
+    const isSuccess = user?.isSuccess;
+
+    if (isSuccess) {
+      // Redirect to home page if isSuccess is true
+      navigate('/', { replace: true });
+    }
+  }, []);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
