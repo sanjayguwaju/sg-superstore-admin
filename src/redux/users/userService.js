@@ -9,6 +9,16 @@ const register = async (userData) => {
   return response.data;
 };
 
+// Add New User
+const addNewUser = async (userData) => {
+  const response = await axios.post(API_URL + "/users/adduser", userData);
+}
+// Delete User
+const deleteUser = async (id) => {
+  const response = await axios.delete(API_URL + "/users/" + id);
+  return response.data;
+};
+
 // Login User
 const login = async (userData) => {
   const response = await axios.post(API_URL + "/auth/login", userData);
@@ -26,6 +36,8 @@ const authService = {
   register,
   login,
   logout,
+  addNewUser,
+  deleteUser,
 };
 
 export default authService;
