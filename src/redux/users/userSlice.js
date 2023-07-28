@@ -13,6 +13,17 @@ export const createUser = createAsyncThunk(
     }
   }
 );
+export const addUser = createAsyncThunk(
+  "user/addUser",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await userRequest.post("/users/adduser", userData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
