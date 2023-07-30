@@ -19,6 +19,12 @@ const deleteUser = async (id) => {
   return response.data;
 };
 
+// Update user
+const updateUser = async (id, userData) => {
+  const response = await axios.put(API_URL + "/users/" + id, userData);
+  return response.data;
+};
+
 // Login User
 const login = async (userData) => {
   const response = await axios.post(API_URL + "/auth/login", userData);
@@ -38,6 +44,7 @@ const authService = {
   logout,
   addNewUser,
   deleteUser,
+  updateUser,
 };
 
 export default authService;
