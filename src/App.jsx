@@ -4,6 +4,7 @@ import List from "./pages/list/List";
 import UserList from "./pages/user-list/List";
 import Single from "./pages/single/Single";
 import New from "./pages/new/New";
+import UpdateUser from "./pages/update-user/updateUser";
 import RegisterForm from "./pages/register/Register";
 import ForgetPasswordForm from "./pages/forgetpassword/ForgetPassword";
 import SignupForm from "./pages/signup/SignupForm";
@@ -29,7 +30,8 @@ function App() {
             <Route path="users">
               <Route index element={<ProtectedRoutes Component={UserList}/>} />
               <Route path=":userId" element={ <ProtectedRoutes Component={Single}/>} />
-              <Route path="new" element={<New inputs={userInputs} title="Add New User" />} />
+              <Route path="addnewuser" element={<New inputs={userInputs} title="Add New User" />} />
+              <Route path="updateuser/:id" element={<UpdateUser inputs={userInputs} title="Update User" />} />
             </Route>
             <Route path="products">
               <Route index element={<ProtectedRoutes Component={List}/>} />
