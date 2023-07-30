@@ -3,11 +3,15 @@ import { DataGrid } from "@mui/x-data-grid";
 import { userColumns, userRows } from "./userdatatablesource";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteUser } from "../../redux/users/userSlice";
 
 const UserDatatable = () => {
   const [data, setData] = useState(userRows);
+  const dispatch = useDispatch();
+
   const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+    dispatch(deleteUser(id));
   };
 
   const actionColumn = [
@@ -21,6 +25,10 @@ const UserDatatable = () => {
             <Link to="/users/test" style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
+            <Link to={`updateuser/${params.row.id}`} style={{ textDecoration: "none" }}>
+              <div className="updateButton">Update</div>
+            </Link>
+            
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}
