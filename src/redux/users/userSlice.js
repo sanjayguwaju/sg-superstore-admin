@@ -24,6 +24,28 @@ export const addUser = createAsyncThunk(
     }
   }
 );
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await userRequest.delete(`/users/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await userRequest.put(`/users/${userData.id}`, userData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
