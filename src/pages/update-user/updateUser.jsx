@@ -1,6 +1,7 @@
 import "./updateUser.scss";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../redux/users/userSlice';
 import { userRows } from "../user-list/userdatatablesource";
@@ -8,28 +9,38 @@ import { userRows } from "../user-list/userdatatablesource";
 const UpdateUser = ({ title }) => {
   const [file, setFile] = useState("");
   const [formData, setFormData] = useState({});
+  const [userList, setUserList] = useState(userRows);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [userData, setUserData] = useState(userRows);
   const [updatedUser, setUpdatedUser] = useState();
+  const dispatch = useDispatch();
+  const { id } = useParams();
 
-
-  const {id} = useParams();
-  
-
+  console.log(formData);
   useEffect(() => {
     if (id) {
-      const singleUser = userData.filter((ele)=> ele.id === id);
+      const parsedId = id; // Convert to number if id is a string
+      const singleUser = userList.find((ele) => ele.id === parsedId);
+      setUpdatedUser(singleUser);
+
+      // Set the initial formData state with the values of the selectedUser
+      setFormData({
+        username: singleUser?.username || '',
+        firstname: singleUser?.firstname || '',
+        lastname: singleUser?.lastname || '',
+        email: singleUser?.email || '',
+        password: '', // Since passwords shouldn't be auto-populated for security reasons
+      });
     }
-  }, [selectedUser]);
+  }, [id, userList]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = { ...formData, img: file };
+    const updatedUserData = { ...formData, img: file };
     try {
       setIsSubmitted(true);
-      await dispatch(updateUser(userData));
+      await dispatch(updateUser(updatedUserData));
       setIsSuccess(true);
       setIsSubmitted(false);
       setTimeout(() => {
@@ -57,8 +68,8 @@ const UpdateUser = ({ title }) => {
               src={
                 file
                   ? URL.createObjectURL(file)
-                  : selectedUser?.img || "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-              }
+                  : updatedUser?.img || "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+              }            
               alt=""
             />
             <div className="formInput">
